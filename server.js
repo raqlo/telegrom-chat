@@ -1,9 +1,14 @@
+require("dotenv").config();
 const express = require('express');
 const bodyParser = require('body-parser');
+
+const db = require('./db');
+const router = require('./network/routes');
 // const router = express.Router()
 
 // const router = require('./components/Messages/network')
-const router = require('./network/routes');
+const URI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.osmsq8l.mongodb.net/?retryWrites=true&w=majority`;
+db(URI)
 const app = express();
 
 app.use(bodyParser.json())

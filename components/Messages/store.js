@@ -1,13 +1,4 @@
-require("dotenv").config();
-const db = require("mongoose");
 const Model = require("./model");
-
-const URI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.osmsq8l.mongodb.net/?retryWrites=true&w=majority`;
-
-db.Promise = global.Promise;
-db.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("[db] Conectada con éxito"))
-  .catch((err) => console.error("[db]", err));
 
 function addMessage(message) {
   const myMessage = new Model(message);
@@ -21,7 +12,7 @@ async function getMessages(filterUser) {
     filter = { user: filterUser };
   }
   const messages = await Model.find(filter);
-  console.log(messages);
+  console.log(`[get]: `, messages);
   return messages;
 }
 
