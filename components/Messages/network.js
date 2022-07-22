@@ -6,7 +6,7 @@ const router = express.Router();
 router.get("/", function (req, res) {
   console.log(req.headers);
   res.header({ custom: "value" });
-  const filterMessages = req.query.user;
+  const filterMessages = req.query.user || null;
   controller
     .getMessages(filterMessages)
     .then((messages) => response.success(req, res, messages, 200))
