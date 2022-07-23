@@ -5,15 +5,23 @@ function addMessage(message) {
   return myMessage.save();
 }
 
-async function getMessages(filterUser) {
+function getMessages(filterUser) {
   // return list
-  let filter = {};
-  if (filterUser !== null) {
-    filter = { user: filterUser };
-  }
-  const messages = await Model.find(filter);
-  console.log(`[get]: `, messages);
-  return messages;
+  return new Promise((resolve, reject) => {
+    let filter = {};
+    if (filterUser !== null) {
+      filter = { user: filterUser };
+    }
+    Model.find(filter)
+        .populate('user')
+        .exec((err, data) => {
+          if(err) {
+            reject(err)
+            return false
+          }
+          resolve(data)
+        })
+  });
 }
 
 async function updateText(id, message) {
@@ -35,5 +43,5 @@ module.exports = {
   add: addMessage,
   list: getMessages,
   updateMessage: updateText,
-  delete: deleteMessage
+  delete: deleteMessage,
 };

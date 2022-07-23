@@ -1,12 +1,15 @@
 const express = require("express");
+const multer = require("multer");
 const response = require("../../network/response");
 const controller = require("./controller");
 const router = express.Router();
 
+const upload = multer({ dest: "public/files" });
+
 router.get("/", function (req, res) {
   console.log(req.headers);
   res.header({ custom: "value" });
-  const filterMessages = req.query.user || null;
+  const filterMessages = req.query.chat || null;
   controller
     .getMessages(filterMessages)
     .then((messages) => response.success(req, res, messages, 200))
@@ -22,10 +25,12 @@ router.patch("/:id", function (req, res) {
       response.error(req, res, "error interno", 500, err);
     });
 });
-router.post("/", function (req, res) {
-  controller.addMessage(req.body.user, req.body.message).then((data) => {
-    response.success(req, res, data, 201);
-  });
+router.post("/", upload.single('file'), function (req, res) {
+  controller
+    .addMessage(req.body.chat, req.body.user, req.body.message)
+    .then((data) => {
+      response.success(req, res, data, 201);
+    });
 });
 
 router.delete("/:id", function (req, res) {

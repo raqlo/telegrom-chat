@@ -3,7 +3,14 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const messagesSchema = new Schema({
-    user: String,
+    chat: {
+        type: Schema.ObjectId,
+        ref: 'Chat'
+    },
+    user: {
+        type: Schema.ObjectId,
+        ref: 'User'
+    },
     message: {
         type: String,
         required: true
@@ -11,5 +18,5 @@ const messagesSchema = new Schema({
     date: Date
 })
 
-const model = mongoose.model('Messages', messagesSchema)
+const model = mongoose.model('Message', messagesSchema)
 module.exports = model
